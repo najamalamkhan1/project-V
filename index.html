@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine? ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --bg: #fff0f3;
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: var(--bg);
+            font-family: 'Quicksand', sans-serif;
+            transition: background 0.5s ease;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2.5rem;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            z-index: 10;
+        }
+
+        .gif-box img {
+            width: 160px;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap; /* Yes button bada hone par adjust ho sake */
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        #yesBtn {
+            background: #2ecc71;
+            color: white;
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        #noBtn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .hidden { display: none; }
+
+        /* Floating Hearts */
+        .heart {
+            position: absolute;
+            color: var(--primary);
+            font-size: 20px;
+            animation: float 4s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div id="quiz">
+            <div class="gif-box">
+                <img id="displayGif" src="https://media.tenor.com/T0_7P3XAn60AAAAi/peach-goma.gif" alt="Cute Bear">
+            </div>
+            <h1 id="questionText">Will you be my Valentine? ✨</h1>
+            <div class="btn-container">
+                <button id="yesBtn">Yes! 🥰</button>
+                <button id="noBtn">No 😢</button>
+            </div>
+        </div>
+
+        <div id="success" class="hidden">
+            <img src="https://media.tenor.com/K2QKkZ19a3kAAAAi/bear-love.gif" alt="Happy">
+            <h1>I Knew It! ❤️</h1>
+            <p>You made my day! I Love You!</p>
+        </div>
+    </div>
+
+    <script>
+        const phrases = [
+            "No",
+            "Are you sure? 🥺",
+            "Ek baar aur soch lo...",
+            "Aise mat karo na pookie!",
+            "Treat meri taraf se, ab haan kardo?",
+            "Chalo coffee pe chalte hain?",
+            "You're breaking my heart 💔",
+            "Main rone lag jaunga... 😭",
+            "Ab toh Yes dabana hi parre ga!",
+            "Ok, I'll stop... Just kidding, SAY YES!"
+        ];
+
+        let clickCount = 0;
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const displayGif = document.getElementById('displayGif');
+        const questionText = document.getElementById('questionText');
+
+        // No Button Logic (Apni jagah rahega, sirf text aur size change karega)
+        noBtn.addEventListener('click', () => {
+            clickCount++;
+            
+            // Text change karna
+            if (clickCount < phrases.length) {
+                noBtn.innerText = phrases[clickCount];
+            } else {
+                noBtn.innerText = "Please? 🥺";
+            }
+
+            // Yes button ka size barhana (Max size limit ke sath)
+            let newSize = 16 + (clickCount * 12); 
+            if (newSize < 300) { // Screen se bahar na nikal jaye
+                yesBtn.style.fontSize = newSize + 'px';
+                yesBtn.style.padding = (newSize / 2) + 'px ' + newSize + 'px';
+            }
+
+            // GIF change karna emotional impact ke liye
+            if(clickCount === 2) displayGif.src = "https://media.tenor.com/lZ2y5m43s5sAAAAi/sad-bear.gif";
+            if(clickCount === 5) displayGif.src = "https://media.tenor.com/U03_vS9A7pUAAAAi/milk-and-mocha-bear.gif";
+        });
+
+        // Yes Button Logic
+        yesBtn.addEventListener('click', () => {
+            document.getElementById('quiz').classList.add('hidden');
+            document.getElementById('success').classList.remove('hidden');
+            document.body.style.background = "#ff4d6d";
+        });
+
+        // Background Hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 4000);
+        }
+        setInterval(createHeart, 400);
+    </script>
+</body>
+</html>
