@@ -3,179 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Be My Valentine? ✨</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <title>Surprise for Naino ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Dancing+Script:wght@700&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #ff4d6d;
-            --bg: #fff0f3;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #fff0f3; color: #4a0e0e; font-family: 'Roboto', sans-serif; overflow-x: hidden; }
 
-        body {
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: var(--bg);
-            font-family: 'Quicksand', sans-serif;
-            transition: background 0.5s ease;
+        /* --- TIMER SCREEN --- */
+        #timer-screen { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: linear-gradient(135deg, #fff0f3 0%, #ffccd5 100%);
+            z-index: 10000; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; text-align: center; padding: 20px;
         }
-
-        .card {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 2.5rem;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
-            text-align: center;
-            max-width: 450px;
-            width: 90%;
-            z-index: 10;
+        .timer-box { display: flex; gap: 15px; margin: 30px 0; }
+        .t-segment { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 5px 15px rgba(255, 77, 109, 0.2); min-width: 70px; }
+        .t-num { font-size: 2rem; font-weight: 800; color: #ff4d6d; display: block; }
+        .t-lab { font-size: 0.7rem; text-transform: uppercase; color: #ff8fa3; }
+        
+        #unlock-btn { 
+            display: none; background: #ff4d6d; color: white; border: none; 
+            padding: 15px 40px; border-radius: 50px; font-weight: 800; 
+            cursor: pointer; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+            animation: pulse 2s infinite;
         }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        .gif-box img {
-            width: 160px;
-            margin-bottom: 1rem;
-        }
+        /* --- PREVIOUS STYLES (Cake, Main, etc.) --- */
+        #intro-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff0f3; z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        #logic-text { font-size: 1.1rem; color: #ff4d6d; font-weight: bold; margin-bottom: 20px; min-height: 30px; }
+        #counter { font-family: 'Dancing Script', cursive; font-size: 8rem; color: #ff4d6d; display: none; }
+        #cake-container { display: none; position: relative; }
+        .cake-wrapper { font-size: 100px; position: relative; display: inline-block; }
+        #knife { position: absolute; top: -50px; right: -100px; font-size: 50px; transform: rotate(-45deg); transition: 0.8s; opacity: 0; z-index: 10; }
+        .knife-move { opacity: 1 !important; transform: translate(-100px, 100px) rotate(-45deg) !important; }
+        .cake-split { display: inline-block; transition: 0.5s; }
+        .split-left { transform: translateX(-20px) rotate(-5deg); }
+        .split-right { transform: translateX(20px) rotate(5deg); }
+        .cut-btn { background: #ff4d6d; color: white; border: none; padding: 15px 40px; border-radius: 50px; font-weight: 800; cursor: pointer; margin-top: 30px; }
 
-        h1 {
-            font-family: 'Dancing Script', cursive;
-            color: var(--primary);
-            font-size: 2.2rem;
-            margin-bottom: 1.5rem;
-        }
+        #music-control { position: fixed; bottom: 20px; right: 20px; z-index: 10001; background: #ff4d6d; color: white; border: none; padding: 10px 15px; border-radius: 50px; cursor: pointer; font-size: 12px; display: none; }
 
-        .btn-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap; /* Yes button bada hone par adjust ho sake */
-        }
+        #main-content { display: none; opacity: 0; transition: 1.5s; }
+        #rose-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+        .rose { position: absolute; top: -20px; font-size: 25px; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
-        button {
-            padding: 12px 25px;
-            font-size: 1rem;
-            font-weight: 700;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-        }
+        section { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 20px; text-align: center; position: relative; z-index: 2; }
+        .glass-panel { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255, 77, 109, 0.3); padding: 30px; border-radius: 30px; max-width: 500px; margin-bottom: 20px; }
+        .polaroid { background: white; padding: 10px 10px 25px 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #ffb3c1; width: 140px; transform: rotate(-5deg); margin: 30px 0; animation: float 4s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-20px) rotate(-2deg); } }
 
-        #yesBtn {
-            background: #2ecc71;
-            color: white;
-            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
-        }
+        .scratch-container { position: relative; width: 280px; height: 150px; margin: 20px auto; background: white; border-radius: 15px; overflow: hidden; }
+        #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 2; cursor: crosshair; touch-action: none; }
+        .scratch-secret { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #fff0f3; color: #ff4d6d; font-family: 'Dancing Script', cursive; font-size: 1.4rem; font-weight: bold; text-align: center; padding: 15px; }
 
-        #noBtn {
-            background: var(--primary);
-            color: white;
-        }
-
-        .hidden { display: none; }
-
-        /* Floating Hearts */
-        .heart {
-            position: absolute;
-            color: var(--primary);
-            font-size: 20px;
-            animation: float 4s linear infinite;
-            z-index: 1;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-        }
+        .btn-celebrate { background: #ff4d6d; color: white; border: none; padding: 18px 50px; border-radius: 50px; font-weight: 800; cursor: pointer; margin-top: 20px; }
+        .naino-typewriter-card { font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: #ff4d6d; min-height: 80px; }
+        .shairi-box { font-family: 'Noto Nastaliq Urdu', serif; font-size: 1.3rem; line-height: 2.8; color: #c9184a; }
+        .typing::after { content: '|'; animation: cursorBlink 0.7s infinite; }
+        @keyframes cursorBlink { 50% { opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <div class="card">
-<h1> For Nainooooooooo </h1>
-        <div id="quiz">
-            <div class="gif-box">
-                <img id="displayGif" src="./Assests/kifoku-teddy-17746.gif" alt="Cute Bear">
-            </div>
-            <h1 id="questionText">Will you be my Valentine? ✨</h1>
-            <div class="btn-container">
-                <button id="yesBtn">Yes! 🥰</button>
-                <button id="noBtn">No 😢</button>
-            </div>
+    <div id="timer-screen">
+        <h2 style="font-family: 'Dancing Script'; font-size: 2.5rem; color: #ff4d6d;">Something Special is Coming...</h2>
+        <p style="margin-top: 10px; color: #c9184a;">Patience is the key to love! ❤️</p>
+        <div class="timer-box">
+            <div class="t-segment"><span class="t-num" id="days">00</span><span class="t-lab">Days</span></div>
+            <div class="t-segment"><span class="t-num" id="hours">00</span><span class="t-lab">Hrs</span></div>
+            <div class="t-segment"><span class="t-num" id="mins">00</span><span class="t-lab">Mins</span></div>
+            <div class="t-segment"><span class="t-num" id="secs">00</span><span class="t-lab">Secs</span></div>
         </div>
+        <button id="unlock-btn" onclick="startSurprise()">UNLOCK SURPRISE 🎁</button>
+    </div>
 
-        <div id="success" class="hidden">
-            <img src="./Assests/tilixia-summer-catch-1668.gif" alt="Happy">
-            <h1>I Knew It! ❤️</h1>
-            <p>You made my day! I Love You!</p>
+    <div id="player-container" style="position: absolute; left: -9999px;"><div id="player"></div></div>
+    <button id="music-control" onclick="toggleMusic()">Music: Loading...</button>
+
+    <div id="intro-overlay">
+        <div id="logic-text"></div>
+        <div id="counter">3</div>
+        <div id="cake-container">
+            <div class="cake-wrapper"><span id="knife">🔪</span><span id="cake-emoji">🎂</span></div>
+            <h2 style="font-family: 'Dancing Script'; color: #ff4d6d; margin-top: 15px;">Wishing you a very Happy Birthday!</h2>
+            <button class="cut-btn" id="cutButton" onclick="animateCakeCut()">CUT CAKE 🔪</button>
         </div>
     </div>
 
+    <div id="main-content">
+        <div id="rose-container"></div>
+        <section>
+            <h1 style="font-family: 'Dancing Script'; font-size: 3rem; color: #ff4d6d;">Suno...</h1>
+            <div class="glass-panel">
+                <span id="baby-title" class="typing-title typing" style="font-weight: 800; color:#ff4d6d; font-size:1.4rem;"></span>
+                <div id="shairi-typewriter" class="shairi-box typing"></div>
+            </div>
+            <div class="polaroid">
+                <div style="height:100px; background:#fff0f3; display:flex; align-items:center; justify-content:center; font-size: 40px;">📅</div>
+                <p class="polaroid-text"><b>15 March 2025</b><br>The day we met! ✨</p>
+            </div>
+        </section>
+
+        <section>
+            <div class="glass-panel">
+                <span style="font-weight: 800; color:#ff4d6d; font-size:1.5rem; display:block; margin-bottom:15px;">Dua-e-Khair 🤲🏻</span>
+                <p style="text-align: left; line-height: 2;">✨ Allah hamesha hansta rakhay.<br>✨ Har tamanna puri ho.<br>✨ Hamara saath hamesha rahay.</p>
+            </div>
+            <h2 style="color: #ff4d6d; font-family: 'Dancing Script'; margin-top: 20px;">Scratch for a Secret 🎁</h2>
+            <div class="scratch-container">
+                <div class="scratch-secret">You are the most precious gift of my life! ❤️💍</div>
+                <canvas id="scratch-canvas" width="280" height="150"></canvas>
+            </div>
+        </section>
+
+        <section>
+            <div class="naino-typewriter-card typing" id="naino-typewriter"></div>
+            <button class="btn-celebrate" onclick="triggerFinalCelebration()">HAPPY BIRTHDAY! 🎈</button>
+            <p style="margin-top: 15px; font-size: 0.7rem; color: #ff4d6d; font-weight: bold;">FUTURE HUBBY KI TARAF SE</p>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script>
-        const phrases = [
-            "No",
-            "Are you sure? 🥺",
-"Nainooooooooo man jao na",
-            "Ek baar aur soch lo...",
-            "Aise mat karo na pookie!",
-            "Treat meri taraf se, ab haan kardo?",
-"Nainooooooooo man jao na abhi to🥺",
-            "Chalo coffee pe chalte hain?",
-            "You're breaking my heart 💔",
-            "Main rone lag jaunga... 😭",
-            "Ab toh Yes dabana hi parre ga!",
-            "Ok, I'll stop... Just kidding, SAY YES!"
-        ];
+        // --- TIMER LOGIC ---
+        // TARGET DATE: 22nd May 2026 at Midnight
+        const targetDate = new Date("May 22, 2026 00:00:00").getTime();
 
-        let clickCount = 0;
-        const noBtn = document.getElementById('noBtn');
-        const yesBtn = document.getElementById('yesBtn');
-        const displayGif = document.getElementById('displayGif');
-        const questionText = document.getElementById('questionText');
+        const timerInterval = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
 
-        // No Button Logic (Apni jagah rahega, sirf text aur size change karega)
-        noBtn.addEventListener('click', () => {
-            clickCount++;
-            
-            // Text change karna
-            if (clickCount < phrases.length) {
-                noBtn.innerText = phrases[clickCount];
-            } else {
-                noBtn.innerText = "Please? 🥺";
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("mins").innerText = minutes.toString().padStart(2, '0');
+            document.getElementById("secs").innerText = seconds.toString().padStart(2, '0');
+
+            if (distance < 0) {
+                clearInterval(timerInterval);
+                document.querySelector(".timer-box").style.display = "none";
+                document.getElementById("unlock-btn").style.display = "block";
+                document.querySelector("#timer-screen h2").innerText = "It's Finally Here! ❤️";
             }
+        }, 1000);
 
-            // Yes button ka size barhana (Max size limit ke sath)
-            let newSize = 16 + (clickCount * 12); 
-            if (newSize < 300) { // Screen se bahar na nikal jaye
-                yesBtn.style.fontSize = newSize + 'px';
-                yesBtn.style.padding = (newSize / 2) + 'px ' + newSize + 'px';
-            }
-
-            // GIF change karna emotional impact ke liye
-            if(clickCount === 2) displayGif.src = "https://media.tenor.com/lZ2y5m43s5sAAAAi/sad-bear.gif";
-            if(clickCount === 5) displayGif.src = "https://media.tenor.com/U03_vS9A7pUAAAAi/milk-and-mocha-bear.gif";
-        });
-
-        // Yes Button Logic
-        yesBtn.addEventListener('click', () => {
-            document.getElementById('quiz').classList.add('hidden');
-            document.getElementById('success').classList.remove('hidden');
-            document.body.style.background = "#ff4d6d";
-        });
-
-        // Background Hearts
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart');
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 4000);
+        function startSurprise() {
+            document.getElementById('timer-screen').style.display = 'none';
+            document.getElementById('intro-overlay').style.display = 'flex';
+            document.getElementById('music-control').style.display = 'block';
+            showLogic();
         }
-        setInterval(createHeart, 400);
+
+        // --- YOUTUBE API ---
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '0', width: '0',
+                videoId: 'V7LwfY5U5WI', 
+                events: { 'onReady': onPlayerReady }
+            });
+        }
+        function onPlayerReady(event) { document.getElementById('music-control').innerText = "Music Ready 🎵"; }
+        function toggleMusic() {
+            if (player.getPlayerState() == 1) { player.pauseVideo(); document.getElementById('music-control').innerText = "Play 🎵"; }
+            else { player.playVideo(); document.getElementById('music-control').innerText = "Playing... ❤️"; }
+        }
+
+        // --- INTRO & CAKE ---
+        const logicMsgs = ["Initializing Surprise...", "Checking Heartbeat... Normal", "Hubby's Bachaaaa Verified! ✅", "All Systems Ready!"];
+        let msgIdx = 0;
+        function showLogic() {
+            const el = document.getElementById('logic-text');
+            if (msgIdx < logicMsgs.length) { el.innerText = logicMsgs[msgIdx++]; setTimeout(showLogic, 1000); }
+            else { el.style.display = 'none'; startCountdown(); }
+        }
+
+        function startCountdown() {
+            let count = 3; const cEl = document.getElementById('counter'); cEl.style.display = 'block';
+            const cInt = setInterval(() => {
+                count--; if (count > 0) cEl.innerText = count;
+                else { clearInterval(cInt); cEl.style.display='none'; document.getElementById('cake-container').style.display='block'; }
+            }, 1000);
+        }
+
+        function animateCakeCut() {
+            document.getElementById('cutButton').style.display='none';
+            document.getElementById('knife').classList.add('knife-move');
+            player.playVideo();
+            document.getElementById('music-control').innerText = "Playing... ❤️";
+            setTimeout(() => {
+                document.getElementById('cake-emoji').innerHTML = '<span class="cake-split split-left">🎂</span><span class="cake-split split-right">🎂</span>';
+                confetti({ particleCount: 150, spread: 70 });
+                setTimeout(revealPage, 1200);
+            }, 700);
+        }
+
+        function revealPage() {
+            document.getElementById('intro-overlay').style.display='none';
+            document.getElementById('main-content').style.display='block';
+            setTimeout(() => { document.getElementById('main-content').style.opacity='1'; startTypingFlow(); setInterval(createRose, 300); initScratch(); }, 100);
+        }
+
+        function initScratch() {
+            const canvas = document.getElementById('scratch-canvas'); const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#C0C0C0'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.globalCompositeOperation = 'destination-out';
+            let drawing = false;
+            function getPos(e) {
+                const rect = canvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return { x: clientX - rect.left, y: clientY - rect.top };
+            }
+            function draw(e) {
+                if (!drawing) return;
+                const pos = getPos(e);
+                ctx.beginPath(); ctx.arc(pos.x, pos.y, 25, 0, Math.PI * 2); ctx.fill();
+            }
+            canvas.addEventListener('mousedown', () => drawing = true);
+            canvas.addEventListener('touchstart', (e) => { drawing = true; draw(e); });
+            window.addEventListener('mouseup', () => drawing = false);
+            window.addEventListener('touchend', () => drawing = false);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); }, { passive: false });
+        }
+
+        function triggerFinalCelebration() {
+            confetti({ particleCount: 400, spread: 100, origin: { y: 0.6 } });
+            alert("Happy Birthday to my dearest Zojaaaaa! ❤️💍");
+        }
+
+        // --- TYPING FLOW ---
+        const babyTitleText = "Hubby ka Baby 🌸";
+        const shairiText = "خدا کرے کہ نیا سال تیرے دامن میں، <br> وہ ساری خوشیاں بھر دے جن کی تجھے تمنا ہے۔";
+        let tIdx = 0, sIdx = 0;
+        function startTypingFlow() { typeTitle(); }
+        function typeTitle() {
+            const b = document.getElementById("baby-title");
+            if (tIdx < babyTitleText.length) { b.innerHTML += babyTitleText.charAt(tIdx++); setTimeout(typeTitle, 100); }
+            else { b.classList.remove("typing"); typeShairi(); }
+        }
+        function typeShairi() {
+            const s = document.getElementById("shairi-typewriter");
+            if (sIdx < shairiText.length) {
+                if (shairiText.substring(sIdx, sIdx+4) === "<br>") { s.innerHTML += "<br>"; sIdx += 4; }
+                else { s.innerHTML += shairiText.charAt(sIdx++); }
+                setTimeout(typeShairi, 80);
+            } else { s.classList.remove("typing"); typeDual(); }
+        }
+        const nText = "NAINO", hText = "HUBBY KA BACHAAAAA ❤️";
+        let dIdx = 0, isDel = false;
+        function typeDual() {
+            const tw = document.getElementById("naino-typewriter");
+            if (!isDel && dIdx < nText.length) { tw.innerHTML += nText.charAt(dIdx++); setTimeout(typeDual, 200); }
+            else if (!isDel && dIdx === nText.length) { isDel = true; setTimeout(typeDual, 2000); }
+            else if (isDel && dIdx > 0) { tw.innerHTML = nText.substring(0, dIdx - 1); dIdx--; setTimeout(typeDual, 100); }
+            else { isDel = false; typeHubby(); }
+        }
+        let fhIdx = 0;
+        function typeHubby() {
+            const tw = document.getElementById("naino-typewriter");
+            if (fhIdx < hText.length) { tw.innerHTML += hText.charAt(fhIdx++); setTimeout(typeHubby, 150); }
+        }
+        function createRose() {
+            const c = document.getElementById('rose-container'); const r = document.createElement('div');
+            r.classList.add('rose'); r.innerHTML = '🌹'; r.style.left = Math.random() * 100 + 'vw';
+            r.style.animationDuration = Math.random() * 2 + 3 + 's'; c.appendChild(r);
+            setTimeout(() => r.remove(), 5000);
+        }
     </script>
 </body>
 </html>
